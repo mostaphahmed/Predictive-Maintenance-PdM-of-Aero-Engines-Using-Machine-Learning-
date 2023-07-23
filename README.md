@@ -5,14 +5,42 @@ This repository showcases a PdM system that utilizes NN to predict Aero Engine R
 
 This work draws inspiration from prior contributions by mohyunho, available at https://github.com/mohyunho/N-CMAPSS_DL/blob/main/README.md.
 
-You can prepare training and test sample arrays for machine learning models, particularly for deep learning architectures that accept time-windowed data, using NASA's N-CMAPSS dataset. Follow the steps below:
+# N-CMAPSS Data Processing Instructions
+This repository contains code for processing the NASA N-CMAPSS dataset to create training and test sample arrays for machine learning models, particularly those using deep learning architectures that accept time-windowed data. Below are the instructions for using the code:
 
-Download the Turbofan Engine Degradation Simulation Data Set-2, known as the N-CMAPSS dataset [2], from NASA's prognostic data repository, available at https://www.nasa.gov/content/prognostics-center-of-excellence-data-set-repository
+# Download N-CMAPSS Dataset:
 
-Once you have the dataset downloaded, focus on dataset DS02, as it is used for data-driven prognostics, which is what we need.
+Download the Turbofan Engine Degradation Simulation Data Set-2, known as the N-CMAPSS dataset, from NASA's prognostic data repository.avaliable at https://www.nasa.gov/content/prognostics-center-of-excellence-data-set-repository
 
-Locate the file named "N-CMAPSS_DS02-006.h5" and place it in the /N-CMAPSS folder.
+# Select Dataset:
 
-Now, you can generate npz files for each of the nine engines by executing the provided Python code. These npz files will serve as your training and test sample arrays for the machine learning model, especially useful for deep learning architectures that require time-windowed data as input.
+The dataset DS02 is used for data-driven prognostics, which is what we need. Make sure to focus on this dataset for the processing.
+# Locate Dataset File:
 
-By following these instructions, you'll have the necessary data ready for your machine learning model, allowing you to perform tasks like model-based diagnostics and data-driven prognostics on the Turbofan Engine Degradation Simulation Data Set-2.
+Place the file named "N-CMAPSS_DS02-006.h5" in the /N-CMAPSS folder of this repository.
+# Configure Parameters:
+
+Open the relevant Python script and set the following parameters:
+
+w: Window length (time window size).
+
+s: Stride of the window.
+
+test: Choose "0" to extract samples from the engines used for training; otherwise, set it to create samples from test engines.
+
+sampling: Subsample the data before creating the output array to mitigate memory issues. Adjust the sampling rate as needed (e.g., "10" for a 0.1Hz sampling rate).
+
+# Data Type and Subsampling (Optional):
+
+By default, the data type is set to 'np.float32' to reduce data size and avoid excessive memory use. If necessary, you can modify the data type in the 'data_preparation_unit.py' file located in the /utils folder.
+Subsampling is available to handle potential 'out-of-memory' issues resulting from the original dataset's 1Hz sampling rate.
+# Run the Code:
+```
+python3 sample_creator_unit_auto.py -w 50 -s 1 --test 0 --sampling 10
+```
+Execute the Python code to generate npz files for each of the engines based on the configured parameters.
+
+# Generated Files:
+
+After running the code, you will find nine npz files stored in the /N-CMAPSS/Samples_whole folder. Each compressed file contains two arrays: 'sample' and 'label'.
+For test units, 'label' indicates the ground truth Remaining Useful Life (RUL) of the test engines for evaluation.
