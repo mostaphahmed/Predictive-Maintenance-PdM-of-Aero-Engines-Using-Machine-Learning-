@@ -59,33 +59,8 @@ from keras.initializers import GlorotNormal, GlorotUniform
 initializer = GlorotNormal(seed=0)
 
 
-from utils.data_preparation_strata_unit_based_PCA import df_all_creator, df_train_creator,df_test_creator, Input_Gen
+#from utils.data_preparation_strata_unit_based_PCA import df_all_creator, df_train_creator,df_test_creator, Input_Gen
 from utils.dnn_updated_arch import one_dcnn
-
-
-# import tensorflow.compat.v1 as tf
-# tf.disable_v2_behavior()
-
-# # Ignore tf err log
-# pd.options.mode.chained_assignment = None  # default='warn'
-
-
-# from tensorflow.compat.v1 import ConfigProto
-# from tensorflow.compat.v1 import InteractiveSession
-# config = ConfigProto()
-# config.gpu_options.allow_growth = True
-# session = InteractiveSession(config=config)
-
-# gpus = tf.config.experimental.list_physical_devices('GPU')
-# for gpu in gpus:
-#     tf.config.experimental.set_memory_growth(gpu, True)
-
-# tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-# tf.get_logger().setLevel(logging.ERROR)
-
-
-
-# tf.config.set_visible_devices([], 'GPU')
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_filedir = os.path.join(current_dir, 'N-CMAPSS')
@@ -245,14 +220,12 @@ def scheduler(epoch, lr):
 def release_list(a):
    del a[:]
    del a
-
-
 units_index_train = [2.0, 5.0, 10.0,11.0,14.0,15.0,16.0,18.0,20.0]
 units_index_vlad = [2.0, 5.0, 10.0,11.0,14.0,15.0,16.0,18.0,20.0]
 units_index_test = [2.0, 5.0, 10.0,11.0,14.0,15.0,16.0,18.0,20.0]
 
 def main():
-    # current_dir = os.path.dirname(os.path.abspath(__file__))
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     parser = argparse.ArgumentParser(description='sample creator')
     parser.add_argument('-w', type=int, default=50, help='sequence length', required=True)
     parser.add_argument('-s', type=int, default=1, help='stride of filter')
@@ -265,9 +238,6 @@ def main():
     parser.add_argument('-lr', type=float, default=0.001, help='learning rate')
     parser.add_argument('-sub', type=int, default=10, help='subsampling stride')
     parser.add_argument('--sampling', type=int, default=1, help='sub sampling of the given data. If it is 10, then this indicates that we assumes 0.1Hz of data collection')
-
-
-
     args = parser.parse_args()
 
     win_len = args.w
@@ -349,28 +319,15 @@ def main():
     print("Memory released")
 
     # sample_array_vlad, label_array_vlad = shuffle_array(sample_array_vlad, label_array_vlad)
-    #print("samples are shuffled")
+ 
     print("sample_array_vlad.shape", sample_array_vlad.shape)
     print("label_array_vlad.shape", label_array_vlad.shape)
 
     print ("Vlad  sample dtype", sample_array_vlad.dtype)
     print("Vlad label dtype", label_array_vlad.dtype)
 
-
-    # input_temp = Input(shape=(sample_array.shape[1], sample_array.shape[2]),name='kernel_size%s' %str(int(kernel_size)))
-    # #------
-    # one_d_cnn = one_dcnn(n_filters, kernel_size, sample_array, initializer)
-    # cnn_out = one_d_cnn(input_temp)
-    # x = cnn_out
-    # # x = Dropout(0.5)(x)
-    # main_output = Dense(1, activation='linear', kernel_initializer=initializer, name='main_output')(x)
-    # one_d_cnn_model = Model(inputs=input_temp, outputs=main_output)
-
-    # model = Model(inputs=[input_1, input_2], outputs=main_output)
-
     one_d_cnn_model = one_dcnn(n_filters, kernel_size, sample_array, initializer)
     print(one_d_cnn_model.summary())
-    # one_d_cnn_model.compile(loss='mean_squared_error', optimizer=amsgrad, metrics=[rmse, 'mae'])
     
     start = time.time()
     lr_scheduler = LearningRateScheduler(scheduler)
@@ -380,8 +337,6 @@ def main():
                       callbacks = [EarlyStopping(monitor='val_loss', min_delta=0, patience=pt, verbose=1, mode='min'),
                                     ModelCheckpoint(model_temp_path, monitor='val_loss', save_best_only=True, mode='min', verbose=1)]
                       )
-    # TqdmCallback(verbose=2)
-    # one_d_cnn_model.save(tf_temp_path,save_format='tf')
     figsave(history, win_len, win_stride, bs, lr, sub)
 
     print("The FLOPs is:{}".format(get_flops(one_d_cnn_model)), flush=True)
@@ -391,10 +346,8 @@ def main():
     training_time = end - start
     print("Training time: ", training_time)
 
-
     ### Test (inference after training)
     start = time.time()
-
     output_lst = []
     truth_lst = []
 
@@ -410,7 +363,6 @@ def main():
         print("sub label_array.shape", label_array.shape)
 
         estimator = load_model(model_temp_path)
-
         y_pred_test = estimator.predict(sample_array)
         output_lst.append(y_pred_test)
         truth_lst.append(label_array)
