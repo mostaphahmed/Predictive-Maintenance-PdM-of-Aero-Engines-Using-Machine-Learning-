@@ -30,7 +30,6 @@ def df_all_creator(data_filepath, sampling):
     # Time tracking, Operation time (min):  0.003
     t = time.process_time()
 
-
     with h5py.File(data_filepath, 'r') as hdf:
         # Development(training) set
         W_dev = np.array(hdf.get('W_dev'))  # W
@@ -99,9 +98,6 @@ def df_all_creator(data_filepath, sampling):
     df_T = pd.DataFrame(data=T, columns=T_var)
     df_Y = pd.DataFrame(data=Y, columns=['RUL'])
     df_A = pd.DataFrame(data=A, columns=A_var).drop(columns=['cycle', 'Fc', 'hs'])
-    
-
-
 
     # Merge all the dataframes
     df_all = pd.concat([df_W, df_Xs, df_Xv,df_A,df_T, df_Y], axis=1)
@@ -111,7 +107,6 @@ def df_all_creator(data_filepath, sampling):
     print ("df_all_sub", df_all_smp)    
     print ("df_all_sub.shape", df_all_smp.shape)
     return df_all_smp
-
 
 def df_train_creator(df_all, units_index_train):
     train_strata = []
@@ -131,12 +126,6 @@ def df_train_creator(df_all, units_index_train):
         count_values= list(count_values)
         #Sum of all samples in unit 2
         total_data_point_per_unit=sum(count_values)
-
-        #Ratio carried by unit
-        # ratio_per_unit= total_data_point_per_unit/total_samp
-
-        #Total sample for training per unit
-        # total_trainable_sample_per_unit = ratio_per_unit*percentage_total_sam
 
        #Taking stratified random samples for each unit
         B=0
@@ -174,31 +163,30 @@ def df_train_creator(df_all, units_index_train):
             Train_Unit = df_train['unit'].reset_index(drop = True)
             Train_Featuers = df_train.iloc[:,0:36].reset_index(drop = True)
             Train_RUL = df_train['RUL'].reset_index(drop = True)
-            #Train_RUL = df_train.iloc[:,36].reset_index(drop = True)
+
+            
             # Applying fit_transform on Training DataSet             
             scaler = StandardScaler()
             train_scaled = scaler.fit_transform(Train_Featuers)
             #print("Train Scaled;", train_scaled)
+            
+            
             # Applying PCA 
             pca = PCA(n_components=9)
             train_pca = pca.fit_transform(train_scaled)
             #Concate RUL to new PCA Components
             df_train_pca = pd.DataFrame(train_pca, columns = ['PC1','PC2','PC3','PC4','PC5','PC6','PC7','PC8','PC9'])
             df_train = pd.concat([df_train_pca, Train_RUL,Train_Unit],axis = 1)
-            #print("Df_Train;", df_train)
-         
 
             Vald_Unit = df_vlad['unit'].reset_index(drop = True)
-            # Vald_Featuers = df_vlad.drop(columns = ['RUL'])
             Vald_Featuers = df_vlad.iloc[:,0:36].reset_index(drop = True)
             Vald_RUL = df_vlad['RUL'].reset_index(drop = True)
-            #Vald_RUL = df_vlad.iloc[:,36].reset_index(drop = True)
-     
+
+            
             # Applying Transform on Validation Dataset
             vlad_scaled = scaler.transform(Vald_Featuers)
-            #print("Vlad Scaled;", vlad_scaled)
             vald_pca = pca.transform(vlad_scaled)
-            #print("Vlad PCA;", vald_pca)
+            
             #Concate RUL to Validation_PCA
             df_vald_pca = pd.DataFrame(vald_pca, columns = ['PC1','PC2','PC3','PC4','PC5','PC6','PC7','PC8','PC9'])
             df_vlad = pd.concat([df_vald_pca, Vald_RUL,Vald_Unit], axis = 1)
@@ -224,19 +212,12 @@ def df_test_creator(df_all, units_index_test):
         count_values= list(count_values)
         #Sum of all samples in unit 2
         total_data_point_per_unit=sum(count_values)
-
-        #Ratio carried by unit
-        # ratio_per_unit= total_data_point_per_unit/total_samp
-
-        #Total sample for training per unit
-        # total_trainable_sample_per_unit = ratio_per_unit*percentage_total_sam
-
        #Taking stratified random samples for each unit
         B=0
         sample_per_RUL=0
         for rul in count_values:
             #Getting required samples for each RUL
-            sample_per_RUL_test=int(round(rul/total_data_point_per_unit*3550, 0 ))  # For (8,1) Test_per_unit ==  31950 to get 31950 (total) 20390
+            sample_per_RUL_test=int(round(rul/total_data_point_per_unit*3550, 0 )) 
             df_test_temp_1 = df_test_temp[df_test_temp['RUL']==np.float64(B)]
             #print(df_train_temp_1)
             #Sampling randomly for each required rows per RUL for training
@@ -244,24 +225,19 @@ def df_test_creator(df_all, units_index_test):
             #Getting the resultant of the dataframe for testing
             #df_vlad_test_temp_1 = df_train_temp_1.drop(df_train_temp_2.index)
             B=B+1
-
+            
             test_strata.append(df_test_temp_2)
             df_test_unit_strata = pd.concat(test_strata)
             #Sorting the training dataframe in ascending order with respect to unit number, RUL number and alt number
             df_test = df_test_unit_strata.sort_values(by = ["unit","RUL","alt"], ascending=[True, False, True])
       
-
-      
-            # Test_RUL = df_test['RUL'].to_numpy()
-            # Test_Featuers = df_test.drop(columns = ['RUL']).to_numpy()
             Test_Unit = df_test['unit'].reset_index(drop = True)
             Test_Featuers = df_test.iloc[:,0:36].reset_index(drop = True)
-            #Test_RUL = df_test.iloc[:,36].reset_index(drop = True)
+
             Test_RUL = df_test['RUL'].reset_index(drop = True)
             # Applying Transform on Test Dataset
             test_scaled = scaler.transform(Test_Featuers)
-            #df_test_scaled = pd.DataFrame(test_scaled)
-            #print ("df_test_scaled", test_scaled)
+            
             # Applying PCA 
             test_pca = pca.transform(test_scaled)
             #Concate RUL to Test PCA
@@ -271,47 +247,21 @@ def df_test_creator(df_all, units_index_test):
     return df_test
 
 
-
-
-
 def gen_sequence(id_df, seq_length, seq_cols):
     """ Only sequences that meet the window-length are considered, no padding is used. This means for testing
     we need to drop those which are below the window-length. An alternative would be to pad sequences so that
     we can use shorter ones """
-    # for one id I put all the rows in a single matrix
     data_matrix = id_df[seq_cols].values
     num_elements = data_matrix.shape[0]
-    # Iterate over two lists in parallel.
-    # For example id1 have 192 rows and sequence_length is equal to 50
-    # so zip iterate over two following list of numbers (0,142),(50,192)
-    # 0 50 -> from row 0 to row 50
-    # 1 51 -> from row 1 to row 51
-    # 2 52 -> from row 2 to row 52
-    # ...
-    # 142 192 -> from row 142 to 192
     for start, stop in zip(range(0, num_elements - seq_length), range(seq_length, num_elements)):
         yield data_matrix[start:stop, :]
-
 
 def gen_labels(id_df, seq_length, label):
     """ Only sequences that meet the window-length are considered, no padding is used. This means for testing
     we need to drop those which are below the window-length. An alternative would be to pad sequences so that
     we can use shorter ones """
-    # For one id I put all the labels in a single matrix.
-    # For example:
-    # [[1]
-    # [4]
-    # [1]
-    # [5]
-    # [9]
-    # ...
-    # [200]]
     data_matrix = id_df[label].values
     num_elements = data_matrix.shape[0]
-    # I have to remove the first seq_length labels
-    # because for one id the first sequence of seq_length size have as target
-    # the last label (the previus ones are discarded).
-    # All the next id's sequences will have associated step by step one label as target.
     return data_matrix[seq_length:num_elements, :]
 
 def time_window_slicing (input_array, sequence_length, sequence_cols):
@@ -344,24 +294,18 @@ def time_window_slicing_label_save (input_array, sequence_length, stride, index,
 
     '''
     # generate labels
-    window_lst = []  # a python list to hold the windows
-
+    window_lst = []  
     input_temp = input_array[input_array['unit'] == index][sequence_cols].values
     num_samples = int((input_temp.shape[0] - sequence_length)/stride) + 1
     for i in range(num_samples):
         window = input_temp[i*stride:i*stride + sequence_length]  # each individual window
         window_lst.append(window)
-        # print (window.shape)
 
     label_array = np.asarray(window_lst).astype(np.float64)
-    # label_array = np.asarray(window_lst)
 
-    # np.save(os.path.join(sample_dir_path, 'Unit%s_rul_win%s_str%s' %(str(int(index)), sequence_length, stride)),
-    #         label_array)  # save the file as "outfile_name.npy"
+
 
     return label_array[:,-1]
-
-
 
 def time_window_slicing_sample_save (input_array, sequence_length, stride, index, sample_dir_path, sequence_cols):
     '''
@@ -381,11 +325,6 @@ def time_window_slicing_sample_save (input_array, sequence_length, stride, index
     sample_array = np.dstack(window_lst).astype(np.float64)
     # sample_array = np.dstack(window_lst)
     print ("sample_array.shape", sample_array.shape)
-
-    # np.save(os.path.join(sample_dir_path, 'Unit%s_samples_win%s_str%s' %(str(int(index)), sequence_length, stride)),
-    #         sample_array)  # save the file as "outfile_name.npy"
-    
-    
     
 
     return sample_array
@@ -459,16 +398,6 @@ class Input_Gen(object):
         else:
          print("ERROR")
 
-        # sample_split_lst = np.array_split(sample_array, 3, axis=2)
-        # print (sample_split_lst[0].shape)
-        # print(sample_split_lst[1].shape)
-        # print(sample_split_lst[2].shape)
-
-        # label_split_lst = np.array_split(label_array, 3, axis=0)
-        # print (label_split_lst[0].shape)
-        # print(label_split_lst[1].shape)
-        # print(label_split_lst[2].shape)
-
         print("sample_array.shape", sample_array.shape)
         print("label_array.shape", label_array.shape)
 
@@ -509,7 +438,6 @@ class Input_Gen(object):
 
         return
 
-
     def seq_gen_test(self):
         '''
         concatenate vectors for NNs
@@ -526,13 +454,8 @@ class Input_Gen(object):
                                            self.stride, self.unit_index, self.sample_dir_path, sequence_cols=self.cols_normalize)
         else:
             print("ERROR: ")
-
-
-
         print("sample_array.shape", sample_array.shape)
         print("label_array.shape", label_array.shape)
-
-
 
         np.savez_compressed(os.path.join(self.sample_dir_path, 'Test_Unit%s_win%s_str%s_smp%s' %(str(int(self.unit_index)), self.sequence_length, self.stride, self.sampling)),
                                          sample=sample_array, label=label_array)
