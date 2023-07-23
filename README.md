@@ -58,3 +58,13 @@ For our dataset DS02, we divide it into subgroups based on engine unit and Remai
 py sample_creator_unit_auto.py -w 50 -s 1 --test 0 --sampling 10
 ```
 Creates sampling files based on stratification method for the 9 Unit Engines 
+
+
+# Applying PCA 
+
+PCA is conducted to DS02 data-set reduce the dimensionality of extensive datasets.
+
+```
+py sample_creator_unit_auto_PCA.py  -w 50 -s 1 --test 0 --sampling 10
+```
+
