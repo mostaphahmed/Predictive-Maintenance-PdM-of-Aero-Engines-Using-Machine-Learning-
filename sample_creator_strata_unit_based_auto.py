@@ -29,11 +29,6 @@ from math import sqrt
 import scipy.stats as stats
 
 
-# from utils.data_preparation_unit_6_Train_3_Test_Updated_32_Features import df_all_creator, df_train_creator, df_test_creator, Input_Gen
-
-#from utils.data_preparation_strata_unit_based import df_all_creator, df_train_creator, df_test_creator, Input_Gen
-
-#from utils.data_preparation_unit_based_variable_sample_per_unit_108139 import df_all_creator, df_train_creator, df_test_creator, Input_Gen
 
 #from utils.data_preparation_strata_unit_based_PCA import df_all_creator, df_train_creator, df_test_creator, Input_Gen
 
@@ -47,9 +42,6 @@ np.random.seed(seed)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_filedir = os.path.join(current_dir, 'N-CMAPSS')
 data_filepath = os.path.join(current_dir, 'N-CMAPSS', 'N-CMAPSS_DS02-006.h5')
-
-
-
 
 def main():
     # current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -66,8 +58,6 @@ def main():
     sampling = args.sampling
     selector = args.test
 
-
-
     # Load data
     '''
     W: operative conditions (Scenario descriptors)
@@ -79,34 +69,13 @@ def main():
     '''
 
     df_all = df_all_creator(data_filepath, sampling)
-
-    '''
-    Split dataframe into Train and Test
-    Training units: 2, 5, 10, 16, 18, 20
-    Test units: 11, 14, 15
-
-    '''
-
+    
     units_index_train = [2.0, 5.0, 10.0,11.0,14.0,15.0,16.0,18.0,20.0]
     units_index_vlad = [2.0, 5.0, 10.0,11.0,14.0,15.0,16.0,18.0,20.0]
     units_index_test = [2.0, 5.0, 10.0,11.0,14.0,15.0,16.0,18.0,20.0]
 
     print("units_index_train", units_index_train)
     print("units_index_test", units_index_test)
-
-    # if any(int(idx) == unit_index for idx in units_index_train):
-    #     df_train = df_train_creator(df_all, units_index_train)
-    #     print(df_train)
-    #     print(df_train.columns)
-    #     print("num of inputs: ", len(df_train.columns) )
-    #     df_test = pd.DataFrame()
-    #
-    # else :
-    #     df_test = df_test_creator(df_all, units_index_test)
-    #     print(df_test)
-    #     print(df_test.columns)
-    #     print("num of inputs: ", len(df_test.columns))
-    #     df_train = pd.DataFrame()
 
     df_train, df_vlad = df_train_creator(df_all, units_index_train)
     #df_train = shuffle(df_train)
