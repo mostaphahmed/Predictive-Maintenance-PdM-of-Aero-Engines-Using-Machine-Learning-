@@ -15,6 +15,10 @@ Download the Turbofan Engine Degradation Simulation Data Set-2, known as the N-C
 # Select Dataset:
 
 The dataset DS02 is used for data-driven prognostics, which is what we need. Make sure to focus on this dataset for the processing.
+
+# Data-Exploration:
+ Data exploration for DS02 avaliable at https://github.com/mohyunho/N-CMAPSS_DL/tree/main/Dataset_exploration
+
 # Locate Dataset File:
 
 Place the file named "N-CMAPSS_DS02-006.h5" in the /N-CMAPSS folder of this repository.
