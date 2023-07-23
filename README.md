@@ -62,9 +62,9 @@ Creates sampling files based on stratification method for the 9 Unit Engines
 
 # Applying PCA 
 
-PCA is conducted to DS02 data-set reduce the dimensionality of extensive datasets.
+PCA is conducted to DS02 data-set reduce the dimensionality of extensive datasets. But make sure you choosed the right file from the utils in the sample_creator_unit_auto.py
 
 ```
-py sample_creator_unit_auto_PCA.py  -w 50 -s 1 --test 0 --sampling 10
+py sample_creator_unit_auto.py  -w 50 -s 1 --test 0 --sampling 10
 ```
 
