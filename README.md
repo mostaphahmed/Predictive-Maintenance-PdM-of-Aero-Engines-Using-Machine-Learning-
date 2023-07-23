@@ -40,7 +40,7 @@ By default, the data type is set to 'np.float32' to reduce data size and avoid e
 Subsampling is available to handle potential 'out-of-memory' issues resulting from the original dataset's 1Hz sampling rate.
 # Run the Code:
 ```
-python3 sample_creator_unit_auto.py -w 50 -s 1 --test 0 --sampling 10
+py sample_creator_unit_auto.py -w 50 -s 1 --test 0 --sampling 10
 ```
 Execute the Python code to generate npz files for each of the engines based on the configured parameters.
 
@@ -54,4 +54,7 @@ For test units, 'label' indicates the ground truth Remaining Useful Life (RUL) o
 # Data Sampling Methods for Effective Model Learning
 
 For our dataset DS02, we divide it into subgroups based on engine unit and Remaining Useful Life (RUL). This approach allows us to extract explicit outcomes and ensures adequate representation of each subgroup in the sample. Stratified sampling is particularly beneficial when working with varying numbers of RUL data points for each engine unit.
-
+```
+py sample_creator_unit_auto.py -w 50 -s 1 --test 0 --sampling 10
+```
+Creates sampling files based on stratification method for the 9 Unit Engines 
