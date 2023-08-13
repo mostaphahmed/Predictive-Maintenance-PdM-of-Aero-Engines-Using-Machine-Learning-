@@ -51,7 +51,7 @@ def one_dcnn(n_filters, kernel_size, input_array, initializer):
     cnn.summary()
     return cnn
 
-def mlps(vec_len, h1, h2, h3, h4, h5, h6):
+def mlps(vec_len, h1, h2, h3, h4, h5):
     """
     > This function creates a neural network with 4 hidden layers, each with a specified number of nodes
     
@@ -60,6 +60,7 @@ def mlps(vec_len, h1, h2, h3, h4, h5, h6):
     :param h2: number of neurons in the second hidden layer
     :param h3: number of hidden units in the third hidden layer
     :param h4: the number of neurons in the last hidden layer
+    :param h5: the number of neurons in the last hidden layer
     :return: A model with the specified number of hidden layers and nodes.
     """
     '''
@@ -71,6 +72,5 @@ def mlps(vec_len, h1, h2, h3, h4, h5, h6):
     model.add(Dense(h3, activation='relu'))
     model.add(Dense(h4, activation='relu'))
     model.add(Dense(h5, activation='relu'))
-    model.add(Dense(h6, activation='relu'))
     model.add(Dense(1))
     return model
