@@ -71,5 +71,6 @@ Run the file inference_cnn_aggr_strata_unit_based.py with entering the arguments
 
 [2] Chao, Manuel Arias, Chetan Kulkarni, Kai Goebel, and Olga Fink. "Fusing physics-based and deep learning models for prognostics." Reliability Engineering & System Safety 217 (2022): 107961.
 
+[3] Xiang et al., 2018. Remaining useful life estimation in prognostics using deep convolution neural networks. Reliability Engineering & System Safety, pp. 1-11.
 
-
+[4] Ramasso et al., 2020. Performance Benchmarking and Analysis of Prognostic Methods for CMAPSS Datasets. International Journal of Prognostics and Health Management, Vol. 5, pp. 1-15. no. 2.
