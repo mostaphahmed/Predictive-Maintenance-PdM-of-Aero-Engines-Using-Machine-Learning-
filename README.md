@@ -3,7 +3,7 @@
 This repository showcases a PdM system that utilizes NN to predict Aero Engine RUL. The implementation emphasizes improving accuracy, reducing complexity, and enhancing efficiency through statistical data preprocessing in a data-driven approach. To achieve this, various Neural Network models are employed.
 
 
-This work draws inspiration from prior contributions by mohyunho, available at https://github.com/mohyunho/N-CMAPSS_DL/blob/main/README.md.
+This work draws inspiration from prior contributions by mohyunho, available at https://github.com/mohyunho/N-CMAPSS_DL/tree/main
 
 # N-CMAPSS Data Processing Instructions
 This repository contains code for processing the NASA N-CMAPSS dataset to create training and test sample arrays for machine learning models, particularly those using deep learning architectures that accept time-windowed data. Below are the instructions for using the code:
@@ -57,7 +57,7 @@ For test units, 'label' indicates the ground truth Remaining Useful Life (RUL) o
 For our dataset DS02, we divide it into subgroups based on engine unit and Remaining Useful Life (RUL). This approach allows us to extract explicit outcomes and ensures adequate representation of each subgroup in the sample. Stratified sampling is particularly beneficial when working with varying numbers of RUL data points for each engine unit.
 
 ```
-py sample_creator_unit_auto.py -w 50 -s 1 --test 0 --sampling 10
+py sample_creator_strata_unit_auto.py -w 50 -s 1 --test 0 --sampling 10
 ```
 Creates sampling files based on stratification method for the 9 Unit Engines 
 
@@ -67,9 +67,9 @@ Creates sampling files based on stratification method for the 9 Unit Engines
 PCA is conducted to DS02 data-set reduce the dimensionality of extensive datasets. But make sure you choose the right file from the utils in the sample_creator_unit_auto.py
 
 ```
-py sample_creator_unit_auto.py  -w 50 -s 1 --test 0 --sampling 10
+py sample_creator_strata_unit_auto.py  -w 50 -s 1 --test 0 --sampling 10
 ```
-Note: When running the above line you have to choose which method in sample_creater_strata_unit_based.py 
+Note: When running the above line you have to choose which method in sample_creater_strata_unit_based_auto.py 
 
 # References
 
@@ -79,4 +79,4 @@ Note: When running the above line you have to choose which method in sample_crea
 
 [3] Chao, Manuel Arias, Chetan Kulkarni, Kai Goebel, and Olga Fink. "Fusing physics-based and deep learning models for prognostics." Reliability Engineering & System Safety 217 (2022): 107961.
 
-[4] Mo, Hyunho, and Giovanni Iacca. "Multi-objective optimization of extreme learning machine for remaining useful life prediction." In Applications of Evolutionary Computation: 25th European Conference, EvoApplications 2022, Held as Part of EvoStar 2022, Madrid, Spain, April 20–22, 2022, Proceedings, pp. 191-206. Cham: Springer International Publishing, 2022.
+
