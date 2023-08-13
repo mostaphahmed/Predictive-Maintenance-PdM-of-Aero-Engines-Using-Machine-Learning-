@@ -38,6 +38,7 @@ sampling: Subsample the data before creating the output array to mitigate memory
 
 By default, the data type is set to 'np.float32' to reduce data size and avoid excessive memory use. If necessary, you can modify the data type in the 'data_preparation_unit.py' file located in the /utils folder.
 Subsampling is available to handle potential 'out-of-memory' issues resulting from the original dataset's 1Hz sampling rate.
+
 # Run the Code:
 ```
 py sample_creator_unit_auto.py -w 50 -s 1 --test 0 --sampling 10
@@ -54,6 +55,7 @@ For test units, 'label' indicates the ground truth Remaining Useful Life (RUL) o
 # Data Sampling Methods for Effective Model Learning
 
 For our dataset DS02, we divide it into subgroups based on engine unit and Remaining Useful Life (RUL). This approach allows us to extract explicit outcomes and ensures adequate representation of each subgroup in the sample. Stratified sampling is particularly beneficial when working with varying numbers of RUL data points for each engine unit.
+
 ```
 py sample_creator_unit_auto.py -w 50 -s 1 --test 0 --sampling 10
 ```
@@ -67,7 +69,7 @@ PCA is conducted to DS02 data-set reduce the dimensionality of extensive dataset
 ```
 py sample_creator_unit_auto.py  -w 50 -s 1 --test 0 --sampling 10
 ```
-
+Note: When running the above line you have to choose which method in sample_creater_strata_unit_based.py 
 # References
 
 [1] Frederick, Dean & DeCastro, Jonathan & Litt, Jonathan. (2007). User's Guide for the Commercial Modular Aero-Propulsion System Simulation (C-MAPSS). NASA Technical Manuscript. 2007–215026.
