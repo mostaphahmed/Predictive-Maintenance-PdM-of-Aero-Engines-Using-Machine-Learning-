@@ -70,6 +70,7 @@ PCA is conducted to DS02 data-set reduce the dimensionality of extensive dataset
 py sample_creator_unit_auto.py  -w 50 -s 1 --test 0 --sampling 10
 ```
 Note: When running the above line you have to choose which method in sample_creater_strata_unit_based.py 
+
 # References
 
 [1] Frederick, Dean & DeCastro, Jonathan & Litt, Jonathan. (2007). User's Guide for the Commercial Modular Aero-Propulsion System Simulation (C-MAPSS). NASA Technical Manuscript. 2007–215026.
