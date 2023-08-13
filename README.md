@@ -55,10 +55,8 @@ For test units, 'label' indicates the ground truth Remaining Useful Life (RUL) o
 
 
 # NN Model 
-Run code below
-```
-py inference_cnn_aggr_strata_unit_based.py
-``` 
+Run the file inference_cnn_aggr_strata_unit_based.py with entering the arguments of the CNN/NN
+
 
 # Applying PCA 
 
