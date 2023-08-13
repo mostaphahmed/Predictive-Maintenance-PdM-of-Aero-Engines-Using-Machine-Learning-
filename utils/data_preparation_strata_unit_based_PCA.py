@@ -135,7 +135,6 @@ def df_train_creator(df_all, units_index_train):
             df_train_temp_2 = df_train_temp_1.sample(n=sample_per_RUL_train,axis =0)
             # Getting the resultant of the dataframe for testing
             df_vlad_test_temp_1 = df_train_temp_1.drop(df_train_temp_2.index)
-
             # Here we are taking random samples from the returned Dataframe
             sample_per_RUL_vlad=int(round(rul/total_data_point_per_unit*#####, 0 )) #replace ##### with number of sample 
             df_vlad_temp_2 = df_vlad_test_temp_1[df_vlad_test_temp_1['RUL']==np.float64(B)]
