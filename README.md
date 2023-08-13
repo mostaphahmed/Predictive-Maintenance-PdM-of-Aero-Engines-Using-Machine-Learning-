@@ -53,11 +53,6 @@ Execute the Python code to generate npz files for each of the engines based on t
 After running the code, you will find nine npz files stored in the /N-CMAPSS/Samples_whole folder. Each compressed file contains two arrays: 'sample' and 'label'.
 For test units, 'label' indicates the ground truth Remaining Useful Life (RUL) of the test engines for evaluation.
 
-
-# NN Model 
-Run the file inference_cnn_aggr_strata_unit_based.py with entering the arguments of the CNN/NN
-
-
 # Applying PCA 
 
 PCA is conducted to DS02 data-set reduce the dimensionality of extensive datasets. But make sure you choose the right file from the utils in the sample_creator_unit_auto.py
@@ -66,6 +61,9 @@ PCA is conducted to DS02 data-set reduce the dimensionality of extensive dataset
 py sample_creator_strata_unit_based_PCA.py  -w 50 -s 1 --test 0 --sampling 10
 ```
 Note: When running the above line you have to choose which method in sample_creater_strata_unit_based_auto.py 
+
+# NN Model 
+Run the file inference_cnn_aggr_strata_unit_based.py with entering the arguments of the CNN/NN
 
 # References
 
