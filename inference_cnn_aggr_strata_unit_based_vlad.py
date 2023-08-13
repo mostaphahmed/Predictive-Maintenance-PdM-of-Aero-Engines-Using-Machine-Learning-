@@ -35,12 +35,8 @@ from sklearn.metrics import mean_squared_error
 from math import sqrt
 from tqdm import tqdm
 import scipy.stats as stats
-# from sklearn.utils.testing import ignore_warnings
-# from sklearn.exceptions import ConvergenceWarning
-# import keras
 import tensorflow as tf
 print(tf.__version__)
-# import keras.backend as K
 import keras.backend as K
 from keras import backend
 from keras import optimizers
@@ -58,8 +54,6 @@ from keras.initializers import GlorotNormal, GlorotUniform
 
 initializer = GlorotNormal(seed=0)
 
-
-#from utils.data_preparation_strata_unit_based_PCA import df_all_creator, df_train_creator,df_test_creator, Input_Gen
 from utils.dnn_updated_arch import one_dcnn
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -73,7 +67,7 @@ tf_temp_path = os.path.join(current_dir, 'TF_Model_tf')
 pic_dir = os.path.join(current_dir, 'Figures')
 
 '''
-load array from npz files
+load array from npz files that is created using the sample_creator_strata_unit
 '''
 def load_part_array (sample_dir_path, unit_num, win_len, stride, part_num):
     filename =  'Train_Unit%s_win%s_str%s_part%s.npz' %(str(int(unit_num)), win_len, stride, part_num)
@@ -166,18 +160,6 @@ def rmse(y_true, y_pred):
     return backend.sqrt(backend.mean(backend.square(y_pred - y_true), axis=-1))
 
 
-def shuffle_array(sample_array, label_array):
-    ind_list = list(range(len(sample_array)))
-    print("index_list before: ", ind_list[:10])
-    print("index_list before: ", ind_list[-10:])
-    ind_list = shuffle(ind_list)
-    print("index_list after: ", ind_list[:10])
-    print("index_list after: ", ind_list[-10:])
-    print("Shuffeling in progress")
-    shuffle_sample = sample_array[ind_list, :, :]
-    shuffle_label = label_array[ind_list,]
-    return shuffle_sample, shuffle_label
-
 def figsave(history, win_len, win_stride, bs, lr, sub):
     fig_acc = plt.figure(figsize=(15, 8))
     plt.plot(history.history['loss'])
@@ -234,7 +216,6 @@ def main():
     parser.add_argument('-bs', type=int, default=256, help='batch size')
     parser.add_argument('-ep', type=int, default=30, help='max epoch')
     parser.add_argument('-pt', type=int, default=20, help='patience')
-    #parser.add_argument('-vs', type=float, default=0.1, help='validation split')
     parser.add_argument('-lr', type=float, default=0.001, help='learning rate')
     parser.add_argument('-sub', type=int, default=10, help='subsampling stride')
     parser.add_argument('--sampling', type=int, default=1, help='sub sampling of the given data. If it is 10, then this indicates that we assumes 0.1Hz of data collection')
@@ -298,7 +279,7 @@ def main():
     for index in units_index_vlad:
         print("Load data index: ", index)
         sample_array_vlad, label_array_vlad = load_array_vlad(sample_dir_path, index, win_len, win_stride, sampling)
-        # sample_array, label_array = shuffle_array(sample_array, label_array)
+     
         print("sample_array_vlad.shape", sample_array_vlad.shape)
         print("label_array_vlad.shape", label_array_vlad.shape)
         sample_array_vlad = sample_array_vlad[::sub]
@@ -318,8 +299,7 @@ def main():
     vlad_units_labels_lst = []
     print("Memory released")
 
-    # sample_array_vlad, label_array_vlad = shuffle_array(sample_array_vlad, label_array_vlad)
- 
+
     print("sample_array_vlad.shape", sample_array_vlad.shape)
     print("label_array_vlad.shape", label_array_vlad.shape)
 
