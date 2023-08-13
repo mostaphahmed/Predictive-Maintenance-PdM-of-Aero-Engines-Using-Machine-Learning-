@@ -24,15 +24,20 @@ from sklearn.utils import shuffle
 from sklearn import metrics
 from sklearn import preprocessing
 from sklearn import pipeline
-# from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error
 from math import sqrt
 import scipy.stats as stats
 
-
-
+'''
+There are two ways to create the samples both are based on stratification.
+Method 1: Includes PCA
+Method 2: Normal stratification without PCA i.e all sensors included
+'''
+#Method 1
 #from utils.data_preparation_strata_unit_based_PCA import df_all_creator, df_train_creator, df_test_creator, Input_Gen
 
-from utils.data_preparation_strata_unit_based import df_all_creator, df_train_creator,df_test_creator, Input_Gen
+#Method 2 
+#from utils.data_preparation_strata_unit_based import df_all_creator, df_train_creator,df_test_creator, Input_Gen
 
 seed = 0
 random.seed(0)
@@ -78,7 +83,6 @@ def main():
     print("units_index_test", units_index_test)
 
     df_train, df_vlad = df_train_creator(df_all, units_index_train)
-    #df_train = shuffle(df_train)
     print(df_train)
     print(df_train.columns)
     print("num of inputs: ", len(df_train.columns))
