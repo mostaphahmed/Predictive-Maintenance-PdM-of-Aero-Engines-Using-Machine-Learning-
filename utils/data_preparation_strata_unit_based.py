@@ -81,8 +81,6 @@ def df_all_creator(data_filepath, sampling):
     print("A shape: " + str(A.shape))
 
     '''
-    Illusration of Multivariate time-series of condition monitoring sensors readings for Unit5 (fifth engine)
-
     W: operative conditions (Scenario descriptors) - ['alt', 'Mach', 'TRA', 'T2']
     X_s: measured signals - ['T24', 'T30', 'T48', 'T50', 'P15', 'P2', 'P21', 'P24', 'Ps30', 'P40', 'P50', 'Nf', 'Nc', 'Wf']
     X_v: virtual sensors - ['T40', 'P30', 'P45', 'W21', 'W22', 'W25', 'W31', 'W32', 'W48', 'W50', 'SmFan', 'SmLPC', 'SmHPC', 'phi']
@@ -110,43 +108,42 @@ def df_all_creator(data_filepath, sampling):
 def df_train_creator(df_all, units_index_train):
     train_strata = []
     vlad_strata = []
-    # global df_train, df_train_temp, df_train_concate, count_values, df_train_temp_unit_2, df_train_temp_2,df_train_1
+   
     for idx in units_index_train:
-        # selecting the training units
+        # Selecting the training units
         df_train_temp = df_all[df_all['unit'] == np.float64(idx)]
-        #Getting the number of datapoints in each RUL for each engine unit 
+        # Getting the number of datapoints in each RUL for each engine unit 
         count_values =  df_train_temp.value_counts('RUL', sort = False)
         # Calculation for trainable samples for each RUL and unit
         count_values= list(count_values)
-        #Sum of all samples in each unit 
+        # Sum of all samples in each unit 
         total_data_point_per_unit=sum(count_values)
-       #Taking stratified random samples for each unit
+        # Taking stratified random samples 
         B=0
         sample_per_RUL=0
         for rul in count_values:
-            #Getting required samples for each RUL
-            sample_per_RUL_train=int(round(rul/total_data_point_per_unit*12050, 0 ))
+            # Getting required samples for each RUL
+            sample_per_RUL_train=int(round(rul/total_data_point_per_unit*#####, 0 )) # replace ##### with number of sample  
             df_train_temp_1 = df_train_temp[df_train_temp['RUL']==np.float64(B)]
-            #print(df_train_temp_1)
-            #Sampling randomly for each required rows per RUL for training
+            # Sampling randomly for each required rows per RUL for training
             df_train_temp_2 = df_train_temp_1.sample(n=sample_per_RUL_train,axis =0)
-            #Getting the resultant of the dataframe for testing
+            # Getting the resultant of the dataframe for testing
             df_vlad_test_temp_1 = df_train_temp_1.drop(df_train_temp_2.index)
-            # here we are taking random samples from the returned Dataframe to have the exact amount required for testing
-            sample_per_RUL_vlad=int(round(rul/total_data_point_per_unit*9050, 0 ))
+            # Here we are taking random samples from the returned Dataframe 
+            sample_per_RUL_vlad=int(round(rul/total_data_point_per_unit*#####, 0 )) # replace ##### with number of sample  
             df_vlad_temp_2 = df_vlad_test_temp_1[df_vlad_test_temp_1['RUL']==np.float64(B)]
-            #Sampling randomly for each required rows per RUL for testing
+            # Sampling randomly for each required rows per RUL for testing
             df_vlad_temp_2 = df_vlad_temp_2.sample(n=sample_per_RUL_vlad,axis =0)
 
             B=B+1
             train_strata.append(df_train_temp_2)
             df_train_unit_strata = pd.concat(train_strata)
-            #Sorting the training dataframe in ascending order with respect to unit number, RUL number and alt number
+            # Sorting the training dataframe in ascending order with respect to unit number, RUL number and alt number
             df_train = df_train_unit_strata.sort_values(by = ["unit","RUL"], ascending=[True, False])
             vlad_strata.append(df_vlad_temp_2)
             df_vlad=pd.concat(vlad_strata)
             # Sorting the testing
-            # dataframe in ascending order with respect to unit number, RUL number and alt number
+            # Dataframe in ascending order
             df_vlad = df_vlad.sort_values(by = ["unit","RUL"], ascending=[True, False])
     return df_train, df_vlad
 
@@ -155,116 +152,70 @@ def df_test_creator(df_all, units_index_test):
     test_strata= []
 
     for idx in units_index_test:
-        # selecting the training units
+        # Selecting the training units
         df_test_temp = df_all[df_all['unit'] == np.float64(idx)]
-
-        #Getting the number of datapoints in each RUL for unit 2
+        # Getting the number of datapoints in each RUL for unit 2
         count_values =  df_test_temp.value_counts('RUL', sort = False)
-        # calculation for trainable samples for each RUL and unit
+        # Calculation for trainable samples for each RUL and unit
         count_values= list(count_values)
-        #Sum of all samples in unit 2
+        # Sum of all samples in unit 2
         total_data_point_per_unit=sum(count_values)
-
-       #Taking stratified random samples for each unit
+       # Taking stratified random samples for each unit
         B=0
         sample_per_RUL=0
         for rul in count_values:
-            #Getting required samples for each RUL
-            sample_per_RUL_test=int(round(rul/total_data_point_per_unit*3600, 0 ))  # for 108004 For (6,3) = 10557 (7,2) = 10700 For (6,3) = 10557  All units 3600 
+            # Getting required samples for each RUL
+            sample_per_RUL_test=int(round(rul/total_data_point_per_unit*#####, 0 )) # replace ##### with number of sample   
             df_test_temp_1 = df_test_temp[df_test_temp['RUL']==np.float64(B)]
-            #Sampling randomly for each required rows per RUL for training
+            # Sampling randomly for each required rows per RUL for training
             df_test_temp_2 = df_test_temp_1.sample(n=sample_per_RUL_test,axis =0)
-            #Getting the resultant of the dataframe for testing
+            # Getting the resultant of the dataframe for testing
             B=B+1
             test_strata.append(df_test_temp_2)
             df_test_unit_strata = pd.concat(test_strata)
-            #Sorting the training dataframe in ascending order with respect to unit number, RUL number and alt number
+            # Sorting the training dataframe in ascending order 
             df_test = df_test_unit_strata.sort_values(by = ["unit","RUL"], ascending=[True, False])
     return df_test
 
 def gen_sequence(id_df, seq_length, seq_cols):
-    """ Only sequences that meet the window-length are considered, no padding is used. This means for testing
-    we need to drop those which are below the window-length. An alternative would be to pad sequences so that
-    we can use shorter ones """
-    # for one id I put all the rows in a single matrix
     data_matrix = id_df[seq_cols].values
     num_elements = data_matrix.shape[0]
-    # Iterate over two lists in parallel.
-    # For example id1 have 192 rows and sequence_length is equal to 50
-    # so zip iterate over two following list of numbers (0,142),(50,192)
-    # 0 50 -> from row 0 to row 50
-    # 1 51 -> from row 1 to row 51
-    # 2 52 -> from row 2 to row 52
-    # ...
-    # 142 192 -> from row 142 to 192
     for start, stop in zip(range(0, num_elements - seq_length), range(seq_length, num_elements)):
         yield data_matrix[start:stop, :]
 
 def gen_labels(id_df, seq_length, label):
-    """ Only sequences that meet the window-length are considered, no padding is used. This means for testing
-    we need to drop those which are below the window-length. An alternative would be to pad sequences so that
-    we can use shorter ones """
-    # For one id I put all the labels in a single matrix.
-    # For example:
-    # [[1]
-    # [4]
-    # [1]
-    # [5]
-    # [9]
-    # ...
-    # [200]]
     data_matrix = id_df[label].values
     num_elements = data_matrix.shape[0]
-    # I have to remove the first seq_length labels
-    # because for one id the first sequence of seq_length size have as target
-    # the last label (the previus ones are discarded).
-    # All the next id's sequences will have associated step by step one label as target.
     return data_matrix[seq_length:num_elements, :]
 
 def time_window_slicing (input_array, sequence_length, sequence_cols):
-    # generate labels
+    # Generate labels
     label_gen = [gen_labels(input_array[input_array['unit'] == id], sequence_length, ['RUL'])
                  for id in input_array['unit'].unique()]
     label_array = np.concatenate(label_gen).astype(np.float64)
-    # transform each id of the train dataset in a sequence
+    # Transform each id of the train dataset in a sequence
     seq_gen = (list(gen_sequence(input_array[input_array['unit'] == id], sequence_length, sequence_cols))
                for id in input_array['unit'].unique())
     sample_array = np.concatenate(list(seq_gen)).astype(np.float64)
-    # sample_array = np.concatenate(list(seq_gen))
-
+    # Sample_array = np.concatenate(list(seq_gen))
     print("sample_array")
     return sample_array, label_array
 
 
 def time_window_slicing_label_save (input_array, sequence_length, stride, index, sample_dir_path, sequence_cols = 'RUL'):
-    '''
-    ref
-        for i in range(0, input_temp.shape[0] - sequence_length):
-        window = input_temp[i*stride:i*stride + sequence_length, :]  # each individual window
-        window_lst.append(window)
-        # print (window.shape)
-    '''
-    # generate labels
-    window_lst = []  # a python list to hold the windows
+    # Generate labels
+    window_lst = [] 
     input_temp = input_array[input_array['unit'] == index][sequence_cols].values
     num_samples = int((input_temp.shape[0] - sequence_length)/stride) + 1
     for i in range(num_samples):
         window = input_temp[i*stride:i*stride + sequence_length]  # each individual window
         window_lst.append(window)
     label_array = np.asarray(window_lst).astype(np.float64)
-    # label_array = np.asarray(window_lst)
-
-    # np.save(os.path.join(sample_dir_path, 'Unit%s_rul_win%s_str%s' %(str(int(index)), sequence_length, stride)),
-    #         label_array)  # save the file as "outfile_name.npy"
-
     return label_array[:,-1]
 
 def time_window_slicing_sample_save (input_array, sequence_length, stride, index, sample_dir_path, sequence_cols):
-    '''
-    '''
-    # generate labels
-    window_lst = []  # a python list to hold the windows
-
+    # Generate labels
+    window_lst = []  
     input_temp = input_array[input_array['unit'] == index][sequence_cols].values
     print ("Unit%s input array shape: " %index, input_temp.shape)
     num_samples = int((input_temp.shape[0] - sequence_length)/stride) + 1
@@ -273,11 +224,10 @@ def time_window_slicing_sample_save (input_array, sequence_length, stride, index
         window_lst.append(window)
 
     sample_array = np.dstack(window_lst).astype(np.float64)
-    # sample_array = np.dstack(window_lst)
+  
     print ("sample_array.shape", sample_array.shape)
 
-    # np.save(os.path.join(sample_dir_path, 'Unit%s_samples_win%s_str%s' %(str(int(index)), sequence_length, stride)),
-    #         sample_array)  # save the file as "outfile_name.npy"
+   
     return sample_array
 
 class Input_Gen(object):
@@ -287,10 +237,7 @@ class Input_Gen(object):
 
     def __init__(self, df_train,df_vlad, df_test, cols_normalize, sequence_length, sequence_cols, sample_dir_path,
                  unit_index, sampling, stride):
-        '''
-
-        '''
-        # self.__logger = logging.getLogger('data preparation for using it as the network input')
+     
         print("the number of input signals: ", len(cols_normalize))
         min_max_scaler = preprocessing.MinMaxScaler(feature_range=(-1, 1))
         norm_df = pd.DataFrame(min_max_scaler.fit_transform(df_train[cols_normalize]),
@@ -330,12 +277,7 @@ class Input_Gen(object):
 
 
     def seq_gen(self):
-        '''
-        concatenate vectors for NNs
-        :param :
-        :param :
-        :return:
-        '''
+
 
         if any(index == self.unit_index for index in self.df_train['unit'].unique()):
             print ("Unit for Train")
@@ -355,12 +297,6 @@ class Input_Gen(object):
         return
 
     def seq_gen_vlad(self):
-        '''
-        concatenate vectors for NNs
-        :param :
-        :param :
-        :return:
-        '''
 
         if any(index == self.unit_index for index in self.df_vlad['unit'].unique()):
             print ("Unit for vlad")
@@ -383,12 +319,7 @@ class Input_Gen(object):
         return
 
     def seq_gen_test(self):
-        '''
-        concatenate vectors for NNs
-        :param :
-        :param :
-        :return:
-        '''
+
 
         if any(index == self.unit_index for index in self.df_test['unit'].unique()):
             print("Unit for Test")
