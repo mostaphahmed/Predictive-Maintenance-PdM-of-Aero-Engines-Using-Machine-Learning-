@@ -51,7 +51,6 @@ After running the code, you will find nine npz files stored in the /N-CMAPSS/Sam
 For test units, 'label' indicates the ground truth Remaining Useful Life (RUL) of the test engines for evaluation.
 
 
-# Improving the Previous Contributions by Mohyunho 
 # Data Sampling Methods for Effective Model Learning
 
 For our dataset DS02, we divide it into subgroups based on engine unit and Remaining Useful Life (RUL). This approach allows us to extract explicit outcomes and ensures adequate representation of each subgroup in the sample. Stratified sampling is particularly beneficial when working with varying numbers of RUL data points for each engine unit.
